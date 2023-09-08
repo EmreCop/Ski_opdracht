@@ -1,0 +1,24 @@
+﻿body {
+}
+.formracers {
+  display: flex;
+  flex-direction: column;
+  max-width: 30%;
+  
+}
+.racertable {
+  display: flex;
+  flex-direction: column;
+  max-width: 30%;
+  
+}
+
+.alles {
+  display: grid;
+
+
+}
+button
+{
+  max-width:20%;
+}

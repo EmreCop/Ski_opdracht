@@ -1,0 +1,118 @@
+﻿@using Ski.Data;
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+
+  <label for="RugnummerInput">Rugnummer:</label>
+  <input type="number" id="RugnummerInput" placeholder="Voor number in" @bind-value="RugnumberInput">
+  <label for="VoornaamInput">Voornaam:</label>
+  <input type="text" id="VoornaamInput" placeholder="Voor Voornaam in" @bind-value="VoornaamInput">
+  <label for="AchternaamInput">Achternaam:</label>
+  <input type="text" id="AchternaamInput" placeholder="Voor Achternaam in" @bind-value="AchternaamInput">
+  <label for="GeslachtInput">Geslacht:</label>
+  <input type="text" id="GeslachtInput" placeholder="Voor Geslacht in" @bind-value="GeslachtInput">
+  <label for="GeboortejaarInput">Geboortejaar:</label>
+  <input type="date" id="GeboortejaarInput" @bind-value="GeboortejaarInput">
+  <label for="catogerie">Catogerie:</label>
+  <select id="catogerie" @bind="CategorieInput">
+    <option value="">-</option>
+    <option value="U8">U8</option>
+    <option value="U10">U10</option>
+    <option value="U12">U12</option>
+    <option value="U14">U14</option>
+    <option value="U16">U16</option>
+    <option value="U18">U18</option>
+    <option value="U21">U21</option>
+  </select>
+  <br />
+  <button type="submit" class="btn btn-primary" @onclick="AddRacer">Submit</button>
+  <br />
+   <h3 style="color:red"><b>@Error</b></h3
+
+
+@code {
+
+  [Parameter]
+
+  public Racerslijst FromRacers_lijst { get; set; } = new();
+
+  int? RugnumberInput;
+  string VoornaamInput;
+  string AchternaamInput;
+  string GeslachtInput;
+  string? Error;
+  DateOnly? GeboortejaarInput;
+  string CategorieInput;
+  bool isDuplicate;
+  bool isNull = false;
+
+
+
+
+  void AddRacer()
+  {
+
+
+    FromJson();
+
+    Racer newRacer = new Racer()
+      {
+        Rugnummer = RugnumberInput,
+        Voornaam = VoornaamInput,
+        Achternaam = AchternaamInput,
+        Geslacht = GeslachtInput,
+        Geboortejaar = GeboortejaarInput,
+        Categorie = CategorieInput
+      };
+    Checks(newRacer);
+    if (isNull == true)
+    {
+      Error = "Please fill in all required fields.";
+    }
+    else
+    {
+
+      if (!isDuplicate)
+      {
+        Error = null;
+        FromRacers_lijst.Racers.Add(newRacer);
+        ToJson();
+      }
+      else
+      {
+        Error = "Racer already exists.";
+      }
+    }
+  }
+
+  void ToJson()
+  {
+    var SimpleJsonfile = @"Racerslijst.json";
+    var Simplejson = JsonSerializer.Serialize(FromRacers_lijst);
+    File.WriteAllText(SimpleJsonfile, Simplejson);
+  }
+
+  void FromJson()
+  {
+    var filename = @"Racerslijst.json";
+    if (File.Exists(filename))
+    {
+      var jsonstring = File.ReadAllText(filename);
+      FromRacers_lijst = JsonSerializer.Deserialize<Racerslijst>(jsonstring)!;
+    }
+  }
+
+  void Checks(Racer newRacer)
+  {
+    isDuplicate = FromRacers_lijst.Racers.Any(r =>
+    r.Rugnummer == newRacer.Rugnummer
+      );
+    if (RugnumberInput == null || string.IsNullOrEmpty(VoornaamInput) || string.IsNullOrEmpty(AchternaamInput) || string.IsNullOrEmpty(GeslachtInput) || GeboortejaarInput == null || string.IsNullOrEmpty(CategorieInput))
+    {
+      isNull = true;
+    }
+    else
+    {
+      isNull = false;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+﻿@page "/"
+@using Ski.Data;
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+
+<div class="alles">
+<div class="formracers">
+<button @onclick="Switch" class="@ButtonTypeTable1">Add Racer</button>
+@if (ShowFromRacers == true)
+{
+  <Ski.Components.FormRacers FromRacers_lijst="IndexRacers_lijst"/>
+
+}
+</div>
+
+<div class="racertable">
+<button @onclick="Switch2" class="@ButtonTypeTable2">Show Racers</button>
+@if (Showtable == true)
+{
+  <Ski.Components.TableFormat Table1_lijst="@IndexRacers_lijst" />
+
+}
+</div>
+</div>
+@code {
+
+  Racerslijst IndexRacers_lijst = new();
+  bool Showtable = false;
+  string ButtonTypeTable1 = "btn btn-primary";
+  string ButtonTypeTable2 = "btn btn-primary";
+  bool ShowFromRacers = false;
+
+
+  void Switch()
+  {
+    ShowFromRacers = !ShowFromRacers;
+    ButtonTypeTable1 = ShowFromRacers ? "btn btn-danger" : "btn btn-primary";
+  }
+  void Switch2()
+  {
+    Showtable = !Showtable;
+    ButtonTypeTable2 = Showtable ? "btn btn-danger" : "btn btn-primary";
+  }
+  void FromJson()
+  {
+    var filename = @"Racerslijst.json";
+    if (File.Exists(filename))
+    {
+      var jsonstring = File.ReadAllText(filename);
+      IndexRacers_lijst = JsonSerializer.Deserialize<Racerslijst>(jsonstring)!;
+    }
+  }
+  protected override void OnInitialized()
+  {
+    FromJson();
+  }
+
+}
