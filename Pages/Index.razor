@@ -1,7 +1,4 @@
 ﻿@page "/"
-@using Ski.Data;
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
 
 <div class="alles">
 <div class="form-racers">
@@ -24,7 +21,7 @@
 </div>
 @code {
 
-  Racerslijst IndexRacers_lijst = new();
+  Racerlijst IndexRacers_lijst = new();
   bool Showtable = false;
   string ButtonTypeTable1 = "btn btn-primary";
   string ButtonTypeTable2 = "btn btn-primary";
@@ -47,7 +44,7 @@
     if (File.Exists(filename))
     {
       var jsonstring = File.ReadAllText(filename);
-      IndexRacers_lijst = JsonSerializer.Deserialize<Racerslijst>(jsonstring)!;
+      IndexRacers_lijst = JsonSerializer.Deserialize<Racerlijst>(jsonstring)!;
     }
   }
   protected override void OnInitialized()

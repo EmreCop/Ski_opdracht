@@ -1,0 +1,54 @@
+﻿@page "/Wedstrijden"
+
+<h1>Wedstrijden</h1>
+<hr />
+<div class="form-group">
+  <label for="name">Wedstrijd Name</label>
+  <input type="text" @bind="@WedstrijdName" class="form-control" placeholder="WedStrijdnaam" style="width:25%" id="name" />
+  <label for="type">Wedstrijd Type</label>
+  <select class="form-control" style="width:25%" id="type" @bind="@WedstrijdType">
+    <option>-</option>
+    <option value=1>1</option>
+    <option value=2>2</option>
+    <option value=3>3</option>
+  </select>
+  <br />
+  <button @onclick="@AddWedstrijd" class="btn btn-primary" style="width:25%">Add Wedstrijd</button>
+</div>
+@if (wedstrijdList.Wedstrijden != null)
+{
+  @foreach (var wedstrijd in wedstrijdList.Wedstrijden)
+  {
+    <Ski.Components.WedstrijdFormat Wedstrijd0="wedstrijd"/>
+  }
+}
+
+<br />
+<h5 style="color:red">@Error</h5>
+
+
+@code{
+
+  WedstrijdLijst wedstrijdList = new();
+
+  string? WedstrijdName;
+  int? WedstrijdType;
+  string? Error;
+
+
+  void AddWedstrijd()
+  {
+    if (WedstrijdName != null && WedstrijdType != null)
+    {
+      if (wedstrijdList.Wedstrijden == null)
+        wedstrijdList.Wedstrijden = new List<Wedstrijd>();
+
+      wedstrijdList.Wedstrijden.Add(new Wedstrijd() { WedstrijdName = WedstrijdName, WedsrijdType = WedstrijdType });
+    }
+    else
+    {
+      Error = "Please Fill Everything In";
+    }
+  }
+
+}

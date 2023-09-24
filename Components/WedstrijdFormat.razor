@@ -1,0 +1,37 @@
+﻿@switch (Wedstrijd0?.WedsrijdType)
+{
+  case 1:
+  <WedstrijdFormat1 Wedstrijd1="Wedstrijd0"/>
+    break;
+
+  case 2:
+   <WedstrijdFormat2/>
+
+    break;
+
+  case 3:
+  <WedstrijdFormat3/>
+    break;
+
+  default:
+    <p>Hoe?</p>
+    break;
+
+}
+
+
+
+
+@code {
+  [Parameter]
+  public Wedstrijd? Wedstrijd0 { get; set; }
+
+
+
+
+
+
+
+
+
+}
