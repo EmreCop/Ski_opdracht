@@ -3,7 +3,7 @@
   {
     @foreach (var racer in Racers.Racerlist)
     {
-      <option value="@racer.rug">@($"{racer.FirstName} {racer.LastName}")</option>
+      <option value="@racer.Value.Rugnummer">@($"{racer.Value.FirstName} {racer.Value.LastName}")</option>
     }
 
   }

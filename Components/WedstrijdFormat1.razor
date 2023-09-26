@@ -11,10 +11,10 @@
     @foreach (var racer in Wedstrijd1.Racers)
     {
       <tr>
-        <td>@racer.Rugnummer</td>
-        <td>@racer.FirstName  @racer.LastName</td>
-        <td>@racer.Run1</td>
-        <td>@racer.Run2</td>
+        <td>@racer.Value.Rugnummer</td>
+        <td>@racer.Value.FirstName  @racer.Value.LastName</td>
+        <td>@racer.Value.Run1</td>
+        <td>@racer.Value.Run2</td>
         
       </tr>
     }

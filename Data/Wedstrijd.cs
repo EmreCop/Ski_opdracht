@@ -3,7 +3,7 @@
   public class Wedstrijd
   {
     public string? WedstrijdName { get; set; }
-    public List<Racer> Racers { get; set; } = new();
+    public Dictionary<int, Racer> Racers { get; set; } = new();
     public int? WedsrijdType { get; set; }
 
   }

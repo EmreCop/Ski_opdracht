@@ -42,7 +42,7 @@
 
   public Racerlijst FromRacers_lijst { get; set; } = new();
 
-  int? RugnumberInput;
+  int RugnumberInput;
   string VoornaamInput;
   string AchternaamInput;
   string GeslachtInput;
@@ -88,7 +88,7 @@
       if (!isDuplicate)
       {
         Error = null;
-        FromRacers_lijst.Racerlist.Add(newRacer);
+        FromRacers_lijst.Racerlist.Add(RugnumberInput,newRacer);
         ToJson();
       }
       else
@@ -118,7 +118,7 @@
   void Checks(Racer newRacer)
   {
     isDuplicate = FromRacers_lijst.Racerlist.Any(r =>
-    r.Rugnummer == newRacer.Rugnummer
+    r.Value.Rugnummer == newRacer.Rugnummer
       );
     if (RugnumberInput == null || string.IsNullOrEmpty(VoornaamInput) || string.IsNullOrEmpty(AchternaamInput) || string.IsNullOrEmpty(GeslachtInput) || GeboortejaarInput == null || string.IsNullOrEmpty(CategorieInput))
     {
