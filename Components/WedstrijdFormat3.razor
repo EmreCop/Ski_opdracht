@@ -9,26 +9,31 @@
     <tr>
       <th>Rugnummer</th>
       <th>Name</th>
+      <th>Jaar</th>
+      <th>Club(Code)</th>
+      <th>Club</th>
       <th>Run 1</th>
       <th>Run 2</th>
+      <th>Time</th>
     </tr>
   </thead>
   <tbody>
     @foreach (var racer in Wedstrijd3.Racers)
     {
       <tr>
-        <td>@racer.Value.Rugnummer</td>
-        <td>@racer.Value.FirstName  @racer.Value.LastName</td>
-        <td>@racer.Value.Run1</td>
-        <td>@racer.Value.Run2</td>
+        <td>@racer.Value?.Rugnummer</td>
+        <td>@racer.Value?.FirstName  @racer.Value?.LastName</td>
+        <td>@racer.Value?.CurrentYear</td>
+        <td>@racer.Value?.ClubCode</td>
+        <td>@racer.Value?.Club</td>
+        <td>@racer.Value?.Run1?.Minutes  : @racer.Value?.Run1?.Seconds</td>
+        <td>@racer.Value?.Run2?.Minutes  : @racer.Value?.Run2?.Seconds</td>
+        <td>@racer.Value?.FinalTime?.Minutes : @racer.Value?.FinalTime?.Seconds</td>
 
       </tr>
     }
   </tbody>
 </table>
-
-<RacerSelector Selected="AddRacer" />
-
 @code {
 
   [Parameter]
@@ -50,6 +55,7 @@
         Wedstrijd3.Racers.Add(RacerID, racer.Value);
       }
     }
+    GetTwoRuns();
   }
 
   void RacerSelected(int SeletedRacerID) => RacerID = SeletedRacerID;
