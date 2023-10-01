@@ -1,4 +1,4 @@
-﻿<select @onchange="HandleFileSelection">
+﻿<select class="form-select form-select-sm" style="width:20%" @onchange="HandleFileSelection">
   @if (Racers != null && Racers.Racerlist != null)
   {
     @foreach (var racer in Racers.Racerlist)
@@ -10,16 +10,18 @@
 </select>
 @code {
   [Parameter]
-  public EventCallback<Racer> Selected { get; set; }
+  public EventCallback<int> Selected { get; set; }
 
   Racerlijst Racers = new();
 
 
   void HandleFileSelection(ChangeEventArgs e)
   {
-    if (e.Value != null && e.Value is Racer selectedRacer)
+    string SeletedItem = e.Value.ToString();
+    int x = int.Parse(SeletedItem);
+    if (x != null)
     {
-      Selected.InvokeAsync(selectedRacer);
+      Selected.InvokeAsync(x);
     }
   }
 

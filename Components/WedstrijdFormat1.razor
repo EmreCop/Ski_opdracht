@@ -1,40 +1,101 @@
-﻿<table class="table">
+﻿<h3>@Wedstrijd1.WedstrijdName</h3>
+<div style="display:flex">
+  <RacerSelector Selected="RacerSelected" />
+  <button class="btn btn-primary m-1" @onclick="AddRacer">Voeg Racer toe</button>
+</div>
+<hr />
+<table class="table">
   <thead>
     <tr>
       <th>Rugnummer</th>
       <th>Name</th>
+      <th>Jaar</th>
+      <th>Club(Code)</th>
+      <th>Club</th>
       <th>Run 1</th>
       <th>Run 2</th>
+      <th>Run 3</th>
+      <th>Time</th>
     </tr>
   </thead>
   <tbody>
     @foreach (var racer in Wedstrijd1.Racers)
     {
       <tr>
-        <td>@racer.Value.Rugnummer</td>
-        <td>@racer.Value.FirstName  @racer.Value.LastName</td>
-        <td>@racer.Value.Run1</td>
-        <td>@racer.Value.Run2</td>
-        
+        <td>@racer.Value?.Rugnummer</td>
+        <td>@racer.Value?.FirstName  @racer.Value?.LastName</td>
+        <td>@racer.Value?.CurrentYear</td>
+        <td>@racer.Value?.ClubCode</td>
+        <td>@racer.Value?.Club</td>
+        <td>@racer.Value?.Run1?.Minutes  : @racer.Value?.Run1?.Seconds</td>
+        <td>@racer.Value?.Run2?.Minutes  : @racer.Value?.Run2?.Seconds</td>
+        <td>@racer.Value?.Run3?.Minutes  : @racer.Value?.Run3?.Seconds</td>
+        <td>@racer.Value?.FinalTime?.Minutes : @racer.Value?.FinalTime?.Seconds</td>
       </tr>
     }
   </tbody>
 </table>
 
-<RacerSelector Selected="AddRacer" />
-
-}
 
 @code {
 
   [Parameter]
-  public Wedstrijd Wedstrijd1 {get; set;} = new();
+  public Wedstrijd Wedstrijd1 { get; set; } = new();
 
+  Racerlijst Racers = new();
+  int RacerID;
 
-
-  void AddRacer(Racer racer)
+  void AddRacer()
   {
-    
+
+    foreach (var racer in Racers.Racerlist)
+    {
+      if (racer.Key == RacerID)
+      {
+        if (Wedstrijd1.Racers == null)
+        {
+          Wedstrijd1.Racers = new();
+        }
+
+        Wedstrijd1.Racers.Add(RacerID, racer.Value);
+
+      }
+    }
+    GetTwoFastestRuns();
   }
+
+  void RacerSelected(int SeletedRacerID) => RacerID = SeletedRacerID;
+
+  void FromJson()
+  {
+    var filename = @"Racerslijst.json";
+    if (File.Exists(filename))
+    {
+      var jsonstring = File.ReadAllText(filename);
+      Racers = JsonSerializer.Deserialize<Racerlijst>(jsonstring)!;
+    }
+  }
+
+
+  void GetTwoFastestRuns()
+  {
+    foreach (var racer in Wedstrijd1.Racers)
+    {
+      SkiTime[] runs = new SkiTime[] { racer.Value.Run1, racer.Value.Run2, racer.Value.Run3 };
+
+      SkiTime[] sortedRuns = runs.OrderBy(run => run.TotalSeconds).ToArray();
+
+      SkiTime fastestRun1 = sortedRuns[0];
+      SkiTime fastestRun2 = sortedRuns[1];
+
+      racer.Value.FinalTime = fastestRun1.AddTime(fastestRun2);
+
+    }
+  }
+
+
+
+
+  protected override void OnInitialized() => FromJson();
 
 }

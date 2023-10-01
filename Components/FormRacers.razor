@@ -1,38 +1,42 @@
 ﻿@using Ski.Data;
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
-
-<div class="formracer">
-<label for="RugnummerInput">Rugnummer:</label>
-<input type="number" id="RugnummerInput" placeholder="Voor number in" @bind-value="RugnumberInput">
-<label for="VoornaamInput">Voornaam:</label>
-<input type="text" id="VoornaamInput" placeholder="Voor Voornaam in" @bind-value="VoornaamInput">
-<label for="AchternaamInput">Achternaam:</label>
-<input type="text" id="AchternaamInput" placeholder="Voor Achternaam in" @bind-value="AchternaamInput">
-<label for="GeslachtInput">Geslacht:</label>
-<input type="text" id="GeslachtInput" placeholder="Voor Geslacht in" @bind-value="GeslachtInput">
-<label for="GeboortejaarInput">Geboortejaar:</label>
-<input type="date" id="GeboortejaarInput" @bind-value="GeboortejaarInput">
-<label for="catogerie">Catogerie:</label>
-<select id="catogerie" @bind="CategorieInput">
-  <option value="">-</option>
-  <option value="U8">U8</option>
-  <option value="U10">U10</option>
-  <option value="U12">U12</option>
-  <option value="U14">U14</option>
-  <option value="U16">U16</option>
-  <option value="U18">U18</option>
-  <option value="U21">U21</option>
-</select>
-<label for="Run1">Run 1:</label>
-<input type="time" id="Run1" @bind-value="Run1Input">
-<label for="Run2">Run 2:</label>
-<input type="time" id="Run2" @bind-value="Run2Input">
-<label for="Run3">Run 3:</label>
-<input type="time" id="Run3" @bind-value="Run3Input">
-<br />
-<button type="submit" class="btn btn-primary" @onclick="AddRacer">Submit</button>
-  <br />
+<div class="form-group">
+  <div class="formracer">
+    <label for="RugnummerInput">Rugnummer:</label>
+    <input type="number" id="RugnummerInput" placeholder="Voor number in" @bind-value="RugnumberInput">
+    <label for="VoornaamInput">Voornaam:</label>
+    <input type="text" id="VoornaamInput" placeholder="Voor Voornaam in" @bind-value="VoornaamInput">
+    <label for="AchternaamInput">Achternaam:</label>
+    <input type="text" id="AchternaamInput" placeholder="Voor Achternaam in" @bind-value="AchternaamInput">
+    <label for="GeslachtInput">Geslacht:</label>
+    <input type="text" id="GeslachtInput" placeholder="Voor Geslacht in" @bind-value="GeslachtInput">
+    <label for="GeboortejaarInput">Geboortejaar:</label>
+    <input type="date" id="GeboortejaarInput" @bind-value="GeboortejaarInput">
+    <label for="catogerie">Catogerie:</label>
+    <select id="catogerie" @bind="CategorieInput">
+      <option value="">-</option>
+      <option value="U8">U8</option>
+      <option value="U10">U10</option>
+      <option value="U12">U12</option>
+      <option value="U14">U14</option>
+      <option value="U16">U16</option>
+      <option value="U18">U18</option>
+      <option value="U21">U21</option>
+    </select>
+    <label for="Run1">Run 1:</label>
+    <input type="number" id="Run1" placeholder="Minutes" @bind="Run1InputMinutes">
+    <input type="number" id="Run1" placeholder="Secounds" @bind="Run1InputSecounds">
+    <label for="Run2">Run 2:</label>
+    <input type="number" id="Run1" placeholder="Minutes" @bind="Run2InputMinutes">
+    <input type="number" id="Run2" placeholder="Secounds" @bind="Run2InputSecounds">
+    <label for="Run3">Run 3:</label>
+    <input type="number" id="Run1" placeholder="Minutes" @bind="Run3InputMinutes">
+    <input type="number" id="Run3" placeholder="Secounds" @bind="Run3InputSecounds">
+    <br />
+    <button type="submit" class="btn btn-primary" @onclick="AddRacer">Submit</button>
+    <br />
+  </div>
 </div>
 <h3 style="color:red"><b>@Error</b></h3>
 
@@ -42,26 +46,34 @@
 
   public Racerlijst FromRacers_lijst { get; set; } = new();
 
-  int RugnumberInput;
   string VoornaamInput;
   string AchternaamInput;
   string GeslachtInput;
   string? Error;
-  TimeOnly Run1Input;
-  TimeOnly Run2Input;
-  TimeOnly Run3Input;
-  DateOnly? GeboortejaarInput;
   string CategorieInput;
+
+  int RugnumberInput;
+  int Run1InputSecounds;
+  int Run2InputSecounds;
+  int Run3InputSecounds;
+  int Run1InputMinutes;
+  int Run2InputMinutes;
+  int Run3InputMinutes;
+
+  DateOnly? GeboortejaarInput;
+
   bool isDuplicate;
   bool isNull = false;
 
+  SkiTime Run1 = new();
+  SkiTime Run2 = new();
+  SkiTime Run3 = new();
 
 
 
   void AddRacer()
   {
-
-
+    SkiTimeLogic();
     FromJson();
 
     Racer newRacer = new Racer()
@@ -72,11 +84,11 @@
         Geslacht = GeslachtInput,
         Geboortejaar = GeboortejaarInput,
         Categorie = CategorieInput,
-        Run1 = Run1Input,
-        Run2 = Run2Input,
-        Run3 = Run3Input
-        
+        Run1 = Run1,
+        Run2 = Run2,
+        Run3 = Run3
       };
+
     Checks(newRacer);
     if (isNull == true)
     {
@@ -88,7 +100,7 @@
       if (!isDuplicate)
       {
         Error = null;
-        FromRacers_lijst.Racerlist.Add(RugnumberInput,newRacer);
+        FromRacers_lijst.Racerlist.Add(RugnumberInput, newRacer);
         ToJson();
       }
       else
@@ -129,4 +141,18 @@
       isNull = false;
     }
   }
+  void SkiTimeLogic()
+  {
+    Run1.Seconds = Run1InputSecounds;
+    Run1.Minutes = Run1InputMinutes;
+    Run2.Seconds = Run2InputSecounds;
+    Run2.Minutes = Run2InputMinutes;
+    Run3.Seconds = Run3InputSecounds;
+    Run3.Minutes = Run3InputMinutes;
+  }
+
+
+
 }
+
+

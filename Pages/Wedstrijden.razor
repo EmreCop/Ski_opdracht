@@ -4,7 +4,7 @@
 <hr />
 <div class="form-group">
   <label for="name">Wedstrijd Name</label>
-  <input type="text" @bind="@WedstrijdName" class="form-control" placeholder="WedStrijdnaam" style="width:25%" id="name" />
+  <input type="text" @bind="@WedstrijdName" class="form-control" placeholder="Wedstrijdnaam" style="width:25%" id="name" />
   <label for="type">Wedstrijd Type</label>
   <select class="form-control" style="width:25%" id="type" @bind="@WedstrijdType">
     <option>-</option>
@@ -15,6 +15,9 @@
   <br />
   <button @onclick="@AddWedstrijd" class="btn btn-primary" style="width:25%">Add Wedstrijd</button>
 </div>
+<hr />
+<h5 style="color:red">@Error</h5>
+
 @if (wedstrijdList.Wedstrijden != null)
 {
   @foreach (var wedstrijd in wedstrijdList.Wedstrijden)
@@ -23,8 +26,6 @@
   }
 }
 
-<br />
-<h5 style="color:red">@Error</h5>
 
 
 @code{
@@ -40,6 +41,7 @@
   {
     if (WedstrijdName != null && WedstrijdType != null)
     {
+      Error = "";
       if (wedstrijdList.Wedstrijden == null)
         wedstrijdList.Wedstrijden = new List<Wedstrijd>();
 
