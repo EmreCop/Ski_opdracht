@@ -1,6 +1,6 @@
 ﻿namespace Ski.Data
 {
-  public class WedstrijdLijst
+  public class WedstrijdDictonary
   {
     public List<Wedstrijd>? Wedstrijden { get; set; }
   }

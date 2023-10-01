@@ -3,6 +3,7 @@
 <h1>Wedstrijden</h1>
 <hr />
 <div class="form-group">
+  
   <label for="name">Wedstrijd Name</label>
   <input type="text" @bind="@WedstrijdName" class="form-control" placeholder="Wedstrijdnaam" style="width:25%" id="name" />
   <label for="type">Wedstrijd Type</label>
@@ -17,20 +18,21 @@
 </div>
 <hr />
 <h5 style="color:red">@Error</h5>
-
-@if (wedstrijdList.Wedstrijden != null)
+<button class="btn btn-primary" @onclick="ToJson">Save</button>
+<button class="btn btn-primary" @onclick="FromJson">Load</button>
+@if (wedstrijdDictonary.Wedstrijden != null)
 {
-  @foreach (var wedstrijd in wedstrijdList.Wedstrijden)
+  @foreach (var wedstrijd in wedstrijdDictonary.Wedstrijden)
   {
     <Ski.Components.WedstrijdFormat Wedstrijd0="wedstrijd"/>
   }
 }
 
 
-
 @code{
 
-  WedstrijdLijst wedstrijdList = new();
+  WedstrijdDictonary wedstrijdDictonary = new();
+
 
   string? WedstrijdName;
   int? WedstrijdType;
@@ -42,10 +44,10 @@
     if (WedstrijdName != null && WedstrijdType != null)
     {
       Error = "";
-      if (wedstrijdList.Wedstrijden == null)
-        wedstrijdList.Wedstrijden = new List<Wedstrijd>();
+      if (wedstrijdDictonary.Wedstrijden == null)
+        wedstrijdDictonary.Wedstrijden = new List<Wedstrijd>();
 
-      wedstrijdList.Wedstrijden.Add(new Wedstrijd() { WedstrijdName = WedstrijdName, WedsrijdType = WedstrijdType });
+      wedstrijdDictonary.Wedstrijden.Add(new Wedstrijd() { WedstrijdName = WedstrijdName, WedsrijdType = WedstrijdType });
     }
     else
     {
@@ -53,4 +55,23 @@
     }
   }
 
+  void ToJson()
+  {
+    var SimpleJsonfile = @"Wedstrijden.json";
+    var Simplejson = JsonSerializer.Serialize(wedstrijdDictonary);
+    File.WriteAllText(SimpleJsonfile, Simplejson);
+  }
+
+  void FromJson()
+  {
+    var filename = @"Wedstrijden.json";
+    if (File.Exists(filename))
+    {
+      var jsonstring = File.ReadAllText(filename);
+      if (jsonstring != "")
+      {
+        wedstrijdDictonary = JsonSerializer.Deserialize<WedstrijdDictonary>(jsonstring)!;
+      }
+    }
+  }
 }

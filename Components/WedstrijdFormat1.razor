@@ -4,9 +4,10 @@
   <button class="btn btn-primary m-1" @onclick="AddRacer">Voeg Racer toe</button>
 </div>
 <hr />
-<table class="table">
+<table class="table" >
   <thead>
-    <tr>
+    <tr style="border:solid">
+      <th>Rank</th>
       <th>Rugnummer</th>
       <th>Name</th>
       <th>Jaar</th>
@@ -22,6 +23,7 @@
     @foreach (var racer in Wedstrijd1.Racers)
     {
       <tr>
+        <td></td>
         <td>@racer.Value?.Rugnummer</td>
         <td>@racer.Value?.FirstName  @racer.Value?.LastName</td>
         <td>@racer.Value?.CurrentYear</td>
@@ -35,6 +37,8 @@
     }
   </tbody>
 </table>
+
+
 
 
 @code {
@@ -57,7 +61,7 @@
           Wedstrijd1.Racers = new();
         }
 
-        Wedstrijd1.Racers.Add(RacerID, racer.Value);
+        Wedstrijd1.Racers.TryAdd(RacerID, racer.Value);
 
       }
     }

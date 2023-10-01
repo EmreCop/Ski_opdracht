@@ -4,6 +4,7 @@ namespace Ski.Data
   public class Racer
   {
     public int? Rugnummer { get; set; }
+    public int? Rank { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? Geslacht { get; set; }
